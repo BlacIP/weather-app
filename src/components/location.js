@@ -22,7 +22,7 @@ export const detectLocationAndFetchWeather = () => {
 };
 
 const fetchLocationName = (lat, lon) => {
-  fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`)
+  fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`)
     .then(response => {
       if (!response.ok) {
         throw new Error("Failed to fetch location name");
