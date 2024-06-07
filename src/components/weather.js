@@ -4,12 +4,11 @@ import { setupDownloadButton } from './download.js';
 const apiKey = "335693caab24c80dc3e31365307b3f55";
 
 export const fetchWeather = (city) => {
-  fetch(
+  return fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
   )
   .then(response => {
     if (!response.ok) {
-      alert("No weather found.");
       throw new Error("No weather found.");
     }
     return response.json();
@@ -23,12 +22,8 @@ export const fetchWeather = (city) => {
     const currentTimeLocal = new Date(currentTimeUTC.getTime() + timezoneOffsetSeconds * 1000 + new Date().getTimezoneOffset() * 60000);
     const hours = currentTimeLocal.getHours();
     const minutes = currentTimeLocal.getMinutes();
-const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-document.querySelector(".current-time").innerText = "Current time: " + timeString;
-  })
-  .catch(error => {
-    console.error('Error fetching weather data:', error);
-    alert("Failed to fetch weather data.");
+    const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+    document.querySelector(".current-time").innerText = "Current time: " + timeString;
   });
 };
 
@@ -51,5 +46,5 @@ const displayWeather = (data) => {
 
 export const searchWeather = () => {
   const city = document.querySelector(".search-bar").value;
-  fetchWeather(city);
+  fetchWeather(city).catch(error => console.error('Error fetching weather for searched city:', error));
 };

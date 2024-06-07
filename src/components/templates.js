@@ -24,7 +24,6 @@ export function renderApp() {
         <button class="download">Download Info</button>
         <button class="share">Share</button>
         </div>
-        
       </div>
     </div>
     <div class="history">
