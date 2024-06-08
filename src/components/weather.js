@@ -34,6 +34,7 @@ const displayWeather = (data) => {
   const { speed } = data.wind;
   const weatherDescriptions = data.weather.map(weather => weather.description);
   const formattedDescriptions = weatherDescriptions.join(', ');
+
   document.querySelector(".city").innerText = `Weather in ${name}`;
   document.querySelector(".icon").src = `https://openweathermap.org/img/wn/${icon}.png`;
   document.querySelector(".description").innerText = formattedDescriptions;
@@ -41,8 +42,31 @@ const displayWeather = (data) => {
   document.querySelector(".humidity").innerText = `Humidity: ${humidity}%`;
   document.querySelector(".wind").innerText = `Wind speed: ${speed} km/h`;
   document.querySelector(".weather").classList.remove("loading");
-  document.body.style.backgroundImage = `url('https://source.unsplash.com/1600x900/?${name}')`;
+
+  fetchUnsplashImage(name)
+    .then(imageUrl => {
+      document.body.style.backgroundImage = `url('${imageUrl}')`;
+    })
+    .catch(error => {
+      console.error("Error fetching image:", error);
+      document.body.style.backgroundImage = `url('default_image_url')`; // fallback image
+    });
 };
+
+const fetchUnsplashImage = async (query) => {
+  const accessKey = 'pCYB8oXTX92eWS9F5G2tdft18IN6Y6sDNhB4HeNIlM4';
+  const url = `https://api.unsplash.com/photos/random?query=${query}&client_id=${accessKey}`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const data = await response.json();
+  return data.urls.regular; // Return the URL of the image
+};
+
 
 export const searchWeather = () => {
   const city = document.querySelector(".search-bar").value;
